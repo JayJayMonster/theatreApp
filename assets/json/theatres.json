@@ -1,0 +1,39 @@
+[{
+    "name": "Theater Zuidplein",
+    "image": "",
+    "adress": {
+        "city" : "Rotterdam",
+        "postalCode" : "3083 DP",
+        "streetAddress" : "Gooilandsingel 95",
+        "country": "Nederland"
+    },
+    "coordinates": [51.8909020800305, 4.487558724690039],
+    "reviews": "4,5 stars",
+    "telephone": "010 203 0207"
+}, 
+{
+    "name": "Maaspodium",
+    "image": "",
+    "adress": {
+        "city" : "Rotterdam",
+        "postalCode" : "3024 EH",
+        "streetAddress" : "Sint-Jobsweg 3",
+        "country": "Nederland"
+    },
+    "coordinates": [51.907568583552276, 4.462332281424177],
+    "reviews": "4,5 stars",
+    "telephone": "010 707 0430"
+},
+{
+    "name": "Theater Rotterdam Schouwburg",
+    "image": "",
+    "adress": {
+        "city" : "Rotterdam",
+        "postalCode" : "3012 CL",
+        "streetAddress" : "Schouwburgplein 25",
+        "country": "Nederland"
+    },
+    "coordinates": [51.923443179460335, 4.472524783753819],
+    "reviews": "4,5 stars",
+    "telephone": "010 411 8110"
+}]
