@@ -5,6 +5,7 @@ import { List } from '../components/List';
 import { Home } from '../components/Home';
 import { Settings } from '../components/Settings';
 import { Maps } from '../components/Maps';
+import { MapList } from '../components/MapList';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +26,13 @@ export function AppNavigator() {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="List"
+        name="Maplist"
+        component={MapList}
+        initialParams={{ icon: 'clipboard-list' }}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Notes"
         component={List}
         initialParams={{ icon: 'clipboard-list' }}
         options={{ headerShown: false }}

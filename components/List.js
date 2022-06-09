@@ -126,7 +126,7 @@ export function List() {
     >
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.textColor }]}>
-          LIST OF THEATRES
+          YOUR OWN LIST OF THEATRES
         </Text>
         <Icon
           name="delete"

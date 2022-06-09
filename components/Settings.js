@@ -11,7 +11,7 @@ export function Settings() {
     >
       <Text style={[styles.text, { color: theme.textColor }]}>SETTINGS</Text>
       <Button
-        title="Dark Mode"
+        title={theme.themeMode !== 'dark' ? 'Dark mode' : 'Light mode'}
         onPress={changeTheme}
         color={theme.nav.backgroundColor}
       />
