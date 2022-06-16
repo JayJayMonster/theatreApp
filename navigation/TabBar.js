@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from '../config/themeProvider';
 import Tab from './Tab';
 
 const { width } = Dimensions.get('screen');
 
-const TabBar = ({ state, navigation }) => {
+const TabBar = ({ state, navigation, activeTab }) => {
   const [selected, setSelected] = useState('Home');
   const { theme } = useTheme();
   const { routes } = state;
   const renderColor = currentTab =>
     currentTab === selected ? theme.nav.active : theme.nav.inActive;
 
-  const handlePress = (activeTab, index) => {
+  const handlePress = (tab, index) => {
     if (state.index !== index) {
-      setSelected(activeTab);
-      navigation.navigate(activeTab);
+      setSelected(tab);
+      navigation.navigate(tab);
+      //console.log(activeTab);
     }
   };
+
+  useEffect(() => {
+    setSelected(activeTab);
+  }, [activeTab]);
 
   return (
     <View style={styles.wrapper}>

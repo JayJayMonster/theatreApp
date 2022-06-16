@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   Text,
-  FlatList,
   TouchableOpacity,
   Alert,
   ScrollView,
@@ -13,13 +12,14 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../config/themeProvider';
-import { Dimensions } from 'react-native-web';
 const COLORS = { primary: '#AD48AF', white: '#fff' };
 
-export function List() {
+export function List({ route }) {
   const [theatres, setTheatres] = useState([]);
   const [textInput, setTextInput] = useState('');
   const { theme } = useTheme();
+  const name = route.params;
+  console.log(name.name);
 
   useEffect(() => {
     getTheatresFromUserDevice();
@@ -35,11 +35,12 @@ export function List() {
       Alert.alert('Error', 'Please input a theatre');
     } else {
       const newTheatre = {
+        name: name.name,
         id: Math.random(),
-        task: textInput,
-        completed: false,
+        review: textInput,
       };
       setTheatres([...theatres, newTheatre]);
+      console.log(theatres);
       setTextInput('');
     }
   };
@@ -72,6 +73,10 @@ export function List() {
     setTheatres(newTheatreItem);
   };
 
+  const editTheatre = theatreId => {
+    console.log('edit the review');
+  };
+
   //functions delete all theatres
   const clearAllTheatres = () => {
     Alert.alert('Confirm', 'Clear all theaters?', [
@@ -83,10 +88,6 @@ export function List() {
         text: 'No',
       },
     ]);
-  };
-
-  const goToMarker = () => {
-    console.log('go to the marker page');
   };
 
   //functions a new list item
@@ -103,12 +104,12 @@ export function List() {
               color: COLORS.primary,
             }}
           >
-            {theatre?.task}
+            {theatre?.review} ({theatre?.name})
           </Text>
         </View>
-        <TouchableOpacity onPress={() => goToMarker()}>
+        <TouchableOpacity onPress={() => editTheatre(theatre.id)}>
           <View style={styles.searchIcon}>
-            <Icon name="search" size={20} color="white" />
+            <Icon name="edit" size={20} color="white" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => deleteTheatre(theatre.id)}>
@@ -126,7 +127,7 @@ export function List() {
     >
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.textColor }]}>
-          YOUR OWN LIST OF THEATRES
+          WRITE YOUR OWN REVIEW
         </Text>
         <Icon
           name="delete"
@@ -151,7 +152,7 @@ export function List() {
           <TextInput
             style={[styles.text, { color: theme.textColor }]}
             value={textInput}
-            placeholder="ADD THEATRE"
+            placeholder="ADD REVIEW"
             placeholderTextColor="#911691"
             onChangeText={text => setTextInput(text)}
           />

@@ -1,3 +1,3 @@
-## Theatre App PRG07
+# Theatre App PRG07
 
-# See all theatres around you!
+## See all theatres around you!

@@ -4,11 +4,14 @@ import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 
-export function Maps() {
+export function Maps({ route, navigation, setActiveTab }) {
   const [data, setData] = useState([]);
   const [locationResult, setLocation] = useState(null);
   const [mapRegion, setRegion] = useState(null);
   const [doneFetching, setDoneFetching] = useState(false);
+  const { latitude, longitude } = route.params;
+
+  console.log(latitude, longitude);
 
   //functions use fetch to get theatre data
   useEffect(() => {
@@ -45,7 +48,7 @@ export function Maps() {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     });
-    console.log(mapRegion);
+    //console.log(mapRegion);
   };
 
   return (
@@ -54,6 +57,13 @@ export function Maps() {
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
       >
+        {latitude ? (
+          <Marker
+            pinColor="blue"
+            coordinate={{ latitude: latitude, longitude: longitude }}
+            title="This is the marker you selected"
+          />
+        ) : null}
         {data.map((element, key) => {
           //* Map through all the theatres
           return (
@@ -64,6 +74,10 @@ export function Maps() {
                 longitude: element.coordinates[1],
               }}
               title={element.name}
+              onPress={() => {
+                navigation.navigate('Notes', { name: element.name });
+                setActiveTab('Notes');
+              }}
               description={element.reviews}
             />
           );

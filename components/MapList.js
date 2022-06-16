@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../config/themeProvider';
+import { SafeAreaView } from 'react-native';
 
-export function MapList() {
+export function MapList({ navigation, setActiveTab }) {
   const [data, setData] = useState([]);
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  const { theme } = useTheme();
 
   //functions use fetch to get theatre data
   useEffect(() => {
@@ -23,43 +26,61 @@ export function MapList() {
       .catch(error => console.error(error));
   }, []);
 
-  const goToMarker = (name, lat, long) => {
-    console.log(
-      `Go to ${name} marker, it has ${lat} latitude and ${long} longtitude`
-    );
-    navigation.navigate('Map', { latitude: lat, longtitude: long });
+  const goToMarker = (lat, long) => {
+    navigation.navigate('Map', { latitude: lat, longitude: long });
+    setActiveTab('Map');
   };
 
   return (
-    <ScrollView style={styles.scrollview}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.backgroundColor }]}
+    >
+      <Text style={[styles.title, { color: theme.textColor }]}>
+        List of all theatres
+      </Text>
       {data.map((item, key) => {
         return (
-          <View style={styles.container} key={key}>
+          <View
+            style={[
+              styles.listItem,
+              { backgroundColor: theme.backgroundColor },
+            ]}
+            key={key}
+          >
             <TouchableOpacity
               onPress={() => {
-                goToMarker(item.name, item.coordinates[0], item.coordinates[1]);
+                goToMarker(item.coordinates[0], item.coordinates[1]);
               }}
             >
-              <Text>{item.name}</Text>
+              <Text style={[styles.text, { color: theme.textColor }]}>
+                {item.name}
+              </Text>
             </TouchableOpacity>
           </View>
         );
       })}
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollview: {
-    height: '20%',
-    width: '80%',
-    marginTop: 50,
-    marginBottom: 100,
-    alignSelf: 'center',
-  },
   container: {
-    justifyContent: 'center',
-    alignItems: 'left',
-    padding: 10,
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  listItem: {
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  text: {
+    color: 'black',
+    padding: 5,
+  },
+  title: {
+    paddingHorizontal: 30,
+    paddingBottom: 10,
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#20315f',
   },
 });
