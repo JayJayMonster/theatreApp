@@ -9,13 +9,55 @@ export function Maps({ route, navigation, setActiveTab }) {
   const [locationResult, setLocation] = useState(null);
   const [mapRegion, setRegion] = useState(null);
   const [doneFetching, setDoneFetching] = useState(false);
-  const { latitude, longitude } = route.params;
 
-  console.log(latitude, longitude);
+  const { tempLatitude, tempLongitude, tempLat, tempLon } = route.params;
+
+  const [lat, setLat] = useState(null);
+  const [lon, setLon] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  useEffect(() => {
+    if (route.params?.tempLat) {
+      console.log(`Changed temps: ${tempLat} and ${tempLon}`);
+      setLat(tempLat);
+      setLon(tempLon);
+      setLatitude(null);
+      setLongitude(null);
+      setRegion({
+        latitude: tempLat,
+        longitude: tempLon,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
+  }, [route.params?.tempLat]);
+
+  useEffect(() => {
+    if (route.params?.tempLatitude) {
+      console.log(
+        `Changed temp for list: ${tempLatitude} and ${tempLongitude}`
+      );
+      setLat(null);
+      setLon(null);
+      setLatitude(tempLatitude);
+      setLongitude(tempLongitude);
+      setRegion({
+        latitude: tempLatitude,
+        longitude: tempLongitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
+  }, [route.params?.tempLatitude]);
 
   //functions use fetch to get theatre data
   useEffect(() => {
-    fetch('https://stud.hosted.hr.nl/1009321/theatreApp/theatres.json')
+    fetch('https://stud.hosted.hr.nl/1009321/theatreApp/theatres.json', {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
       .then(response => response.json())
       .then(results => {
         setData(results);
@@ -43,8 +85,8 @@ export function Maps({ route, navigation, setActiveTab }) {
 
     // Center the map on the location we just fetched.
     setRegion({
-      latitude,
-      longitude,
+      latitude: latitude,
+      longitude: longitude,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     });
@@ -57,17 +99,22 @@ export function Maps({ route, navigation, setActiveTab }) {
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
       >
-        {latitude ? (
-          <Marker
-            pinColor="blue"
-            coordinate={{ latitude: latitude, longitude: longitude }}
-            title="This is the marker you selected"
-          />
-        ) : null}
         {data.map((element, key) => {
           //* Map through all the theatres
+          let color = 'purple';
+
+          if (lat == element.coordinates[0] && lon == element.coordinates[1]) {
+            color = 'green';
+          } else if (
+            latitude == element.coordinates[0] &&
+            longitude == element.coordinates[1]
+          ) {
+            color = 'yellow';
+          }
+
           return (
             <Marker
+              pinColor={color}
               key={key}
               coordinate={{
                 latitude: element.coordinates[0],
@@ -75,7 +122,11 @@ export function Maps({ route, navigation, setActiveTab }) {
               }}
               title={element.name}
               onPress={() => {
-                navigation.navigate('Notes', { name: element.name });
+                navigation.navigate('Notes', {
+                  name: element.name,
+                  latitude: element.coordinates[0],
+                  longitude: element.coordinates[1],
+                });
                 setActiveTab('Notes');
               }}
               description={element.reviews}

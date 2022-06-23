@@ -14,12 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../config/themeProvider';
 const COLORS = { primary: '#AD48AF', white: '#fff' };
 
-export function List({ route }) {
+export function List({ route, navigation, setActiveTab }) {
   const [theatres, setTheatres] = useState([]);
   const [textInput, setTextInput] = useState('');
   const { theme } = useTheme();
-  const name = route.params;
-  console.log(name.name);
+  const { latitude, longitude, name } = route.params;
 
   useEffect(() => {
     getTheatresFromUserDevice();
@@ -35,12 +34,13 @@ export function List({ route }) {
       Alert.alert('Error', 'Please input a theatre');
     } else {
       const newTheatre = {
-        name: name.name,
+        name: name,
+        latitude: latitude,
+        longitude: longitude,
         id: Math.random(),
         review: textInput,
       };
       setTheatres([...theatres, newTheatre]);
-      console.log(theatres);
       setTextInput('');
     }
   };
@@ -73,10 +73,6 @@ export function List({ route }) {
     setTheatres(newTheatreItem);
   };
 
-  const editTheatre = theatreId => {
-    console.log('edit the review');
-  };
-
   //functions delete all theatres
   const clearAllTheatres = () => {
     Alert.alert('Confirm', 'Clear all theaters?', [
@@ -90,6 +86,15 @@ export function List({ route }) {
     ]);
   };
 
+  const goBackToMap = (name, lat, long) => {
+    setActiveTab('Map');
+    navigation.navigate('Map', {
+      theatreName: name,
+      tempLat: lat,
+      tempLon: long,
+    });
+  };
+
   //functions a new list item
   const ListItem = ({ theatre }) => {
     return (
@@ -97,21 +102,22 @@ export function List({ route }) {
         style={[styles.listItem, { backgroundColor: theme.backgroundColor }]}
       >
         <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 15,
-              color: COLORS.primary,
-            }}
+          <TouchableOpacity
+            onPress={() =>
+              goBackToMap(theatre.name, theatre.latitude, theatre.longitude)
+            }
           >
-            {theatre?.review} ({theatre?.name})
-          </Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 15,
+                color: COLORS.primary,
+              }}
+            >
+              {theatre?.review} ({theatre?.name})
+            </Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => editTheatre(theatre.id)}>
-          <View style={styles.searchIcon}>
-            <Icon name="edit" size={20} color="white" />
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => deleteTheatre(theatre.id)}>
           <View style={styles.actionIcon}>
             <Icon name="delete" size={20} color="white" />

@@ -36,4 +36,31 @@
     "coordinates": [51.923443179460335, 4.472524783753819],
     "reviews": "4,5 stars",
     "telephone": "010 411 8110"
-}]
+},
+{
+"name": "Stadsschouwburg Haarlem",
+"image": "",
+"adress": {
+    "city" : "Haarlem",
+    "postalCode" : "2011 VG",
+    "streetAddress" : "Wilsonsplein 23",
+    "country": "Nederland"
+},
+"coordinates": [52.37808836910454, 4.625634211791067],
+"reviews": "4,5 stars",
+"telephone": "023 512 1212"
+},
+{
+    "name": "Theater Walhalla",
+    "image": "",
+    "adress": {
+        "city" : "Rotterdam",
+        "postalCode" : "3072 ZR",
+        "streetAddress" : "Sumatraweg 9",
+        "country": "Nederland"
+    },
+    "coordinates": [51.90144763800958, 4.484161054104245],
+    "reviews": "4 stars",
+    "telephone": "010 215 2134"
+    }
+]

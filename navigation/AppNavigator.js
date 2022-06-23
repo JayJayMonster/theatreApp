@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBar from './TabBar';
 import { List } from '../components/List';
@@ -15,7 +15,9 @@ export function AppNavigator() {
   return (
     //* using a tab navigator to navigate
     <Tab.Navigator
-      tabBar={props => <TabBar {...props} activeTab={activeTab} />}
+      tabBar={props => (
+        <TabBar {...props} setActiveTab={setActiveTab} activeTab={activeTab} />
+      )}
     >
       <Tab.Screen
         name="Home"
@@ -39,10 +41,11 @@ export function AppNavigator() {
       </Tab.Screen>
       <Tab.Screen
         name="Notes"
-        component={List}
-        initialParams={{ icon: 'clipboard-list' }}
+        initialParams={{ icon: 'note' }}
         options={{ headerShown: false }}
-      />
+      >
+        {props => <List {...props} setActiveTab={setActiveTab} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Settings"
         component={Settings}

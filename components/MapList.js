@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react';
-import * as React from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '../config/themeProvider';
 import { SafeAreaView } from 'react-native';
 
 export function MapList({ navigation, setActiveTab }) {
   const [data, setData] = useState([]);
-  // const navigation = useNavigation();
   const { theme } = useTheme();
 
   //functions use fetch to get theatre data
   useEffect(() => {
-    fetch('https://stud.hosted.hr.nl/1009321/theatreApp/theatres.json')
+    fetch('https://stud.hosted.hr.nl/1009321/theatreApp/theatres.json', {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
       .then(response => response.json())
       .then(results => {
         setData(results);
@@ -27,8 +22,11 @@ export function MapList({ navigation, setActiveTab }) {
   }, []);
 
   const goToMarker = (lat, long) => {
-    navigation.navigate('Map', { latitude: lat, longitude: long });
-    setActiveTab('Map');
+    navigation.navigate(
+      'Map',
+      { tempLatitude: lat, tempLongitude: long },
+      setActiveTab('Map')
+    );
   };
 
   return (

@@ -5,7 +5,7 @@ import Tab from './Tab';
 
 const { width } = Dimensions.get('screen');
 
-const TabBar = ({ state, navigation, activeTab }) => {
+const TabBar = ({ state, navigation, activeTab, setActiveTab }) => {
   const [selected, setSelected] = useState('Home');
   const { theme } = useTheme();
   const { routes } = state;
@@ -13,11 +13,10 @@ const TabBar = ({ state, navigation, activeTab }) => {
     currentTab === selected ? theme.nav.active : theme.nav.inActive;
 
   const handlePress = (tab, index) => {
-    if (state.index !== index) {
-      setSelected(tab);
-      navigation.navigate(tab);
-      //console.log(activeTab);
-    }
+    setSelected(tab);
+    setActiveTab(tab);
+    //console.log(tab);
+    navigation.navigate(tab);
   };
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const TabBar = ({ state, navigation, activeTab }) => {
           <Tab
             tab={route}
             icon={route.params.icon}
-            onPress={() => handlePress(route.name, index)}
+            onPress={() => handlePress(route.name)}
             color={renderColor(route.name)}
             key={route.key}
           />
